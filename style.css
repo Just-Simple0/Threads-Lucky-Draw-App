@@ -54,8 +54,6 @@ input[type="file"] {
   overflow: hidden !important;
   clip: rect(0, 0, 0, 0) !important;
   border: 0 !important;
-  /* 기존 display: none !important; 대신 이 조합을 사용해보겠습니다. */
-  /* opacity: 0 !important; */ /* 이미 clip으로 충분히 숨김. 혹시 모르니 주석 처리 */
   pointer-events: none !important; /* 마우스 이벤트 완전 무시 */
 }
 
