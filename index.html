@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KBO X odense 텀블러 당첨자 뽑기</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>KBO X odense 텀블러 당첨자 뽑기</h1>
+
+      <div class="input-section">
+        <label for="namesFile">전체 명단 파일 (.txt) 선택:</label>
+        <div class="file-upload-wrapper">
+          <input type="file" id="namesFile" accept=".txt" />
+          <label for="namesFile" class="file-upload-button">파일 선택</label>
+          <span id="namesFileNameDisplay" class="file-name-display"
+            >선택된 파일 없음</span
+          >
+        </div>
+      </div>
+
+      <div class="input-section">
+        <label for="preferredNamesFile"
+          >스친 명단 파일 (.txt) 선택 (선택 사항):</label
+        >
+        <div style="margin-bottom: 10px">
+          맞팔로우 되어 있는 분을 스친이라 정의하며, 가중치는 5배를 준다.
+        </div>
+        <div class="file-upload-wrapper">
+          <input type="file" id="preferredNamesFile" accept=".txt" />
+          <label for="preferredNamesFile" class="file-upload-button"
+            >파일 선택</label
+          >
+          <span id="preferredNamesFileNameDisplay" class="file-name-display"
+            >선택된 파일 없음</span
+          >
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button id="loadCandidatesBtn" class="btn primary">
+          명단 불러오기
+        </button>
+      </div>
+
+      <div id="candidateList" class="candidate-list">
+        <p>명단을 불러오면 이곳에 목록이 표시됩니다.</p>
+      </div>
+
+      <p id="winner" class="winner">
+        명단을 불러온 후, 아래 "뽑기 시작" 버튼을 눌러주세요.
+      </p>
+
+      <div class="button-group">
+        <button id="drawBtn" class="btn secondary" disabled>뽑기 시작</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

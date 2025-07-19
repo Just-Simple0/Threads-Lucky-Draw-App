@@ -1,0 +1,193 @@
+/* Reset & 기본 스타일 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #f9fafb;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  margin-bottom: 24px;
+  font-weight: 700;
+  color: #222;
+  text-align: center;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+}
+
+/* --- 파일 업로드 UI 관련 스타일 --- */
+.input-section {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+.input-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* ⭐⭐ input[type="file"] 스타일 수정: 더 강력하게 숨김 (재시도) ⭐⭐ */
+input[type="file"] {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  border: 0 !important;
+  /* 기존 display: none !important; 대신 이 조합을 사용해보겠습니다. */
+  /* opacity: 0 !important; */ /* 이미 clip으로 충분히 숨김. 혹시 모르니 주석 처리 */
+  pointer-events: none !important; /* 마우스 이벤트 완전 무시 */
+}
+
+.file-upload-wrapper {
+  display: flex;
+  align-items: center; /* ⭐⭐ 요소를 수직 중앙에 정렬 (가장 중요) ⭐⭐ */
+  border: 1.8px solid #ddd;
+  border-radius: 8px;
+  padding: 8px;
+  margin-bottom: 10px;
+  background-color: #f3f4f6;
+  gap: 10px; /* 요소들 사이의 간격 */
+  line-height: normal; /* ⭐⭐ 추가: 부모의 line-height를 초기화하여 자식에 영향 줄이기 ⭐⭐ */
+}
+
+/* "파일 선택" 버튼 */
+.file-upload-button {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9em;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+  flex-shrink: 0;
+  vertical-align: middle; /* ⭐⭐ 추가: 라벨의 수직 정렬 기준을 명확히 함 ⭐⭐ */
+  line-height: normal; /* ⭐⭐ 추가: 라벨의 line-height를 초기화 ⭐⭐ */
+}
+
+.file-upload-button:hover {
+  background-color: #d0d0d0;
+}
+
+/* "선택된 파일 없음" 또는 파일 이름 표시 텍스트 */
+.file-name-display {
+  flex-grow: 1;
+  padding-left: 0;
+  color: #666;
+  font-size: 0.9em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  vertical-align: middle; /* ⭐⭐ 추가: span의 수직 정렬 기준을 명확히 함 ⭐⭐ */
+  line-height: normal; /* ⭐⭐ 추가: span의 line-height를 초기화 ⭐⭐ */
+}
+
+/* --- 버튼 스타일 --- */
+.btn {
+  margin-top: 20px;
+  padding: 14px 0;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.btn:disabled {
+  background-color: #bbb;
+  cursor: not-allowed;
+}
+
+.primary {
+  background-color: #2563eb;
+  color: white;
+}
+
+.primary:hover:not(:disabled) {
+  background-color: #1e40af;
+}
+
+.secondary {
+  background-color: #10b981;
+  color: white;
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: #047857;
+}
+
+/* --- 명단 목록 스타일 --- */
+.candidate-list {
+  margin-top: 25px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #fcfcfc;
+  min-height: 150px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.candidate-list p {
+  color: #888;
+  text-align: center;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.candidate-item {
+  padding: 5px 0;
+  border-bottom: 1px dashed #eee;
+  font-size: 1.1em;
+  color: #444;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.candidate-item:last-child {
+  border-bottom: none;
+}
+
+.preferred-indicator {
+  margin-left: 8px;
+  font-size: 1.2em;
+  line-height: 1;
+  color: #007bff;
+  flex-shrink: 0;
+}
+
+/* 당첨자 표시 텍스트 */
+.winner {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #ef4444;
+  min-height: 1.5em;
+}
