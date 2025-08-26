@@ -3,12 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KBO X odense 텀블러 당첨자 뽑기</title>
+    <title>나눔 당첨자 뽑기</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
-      <h1>KBO X odense 텀블러 당첨자 뽑기</h1>
+      <h1>나눔 당첨자 뽑기</h1>
+      <p class="subtext">전체 명단과 맞팔 명단을 업로드 한 뒤, 추첨을 진행하세요.</p>
 
       <div class="input-section">
         <label for="namesFile">전체 명단 파일 (.txt) 선택:</label>
@@ -23,10 +24,10 @@
 
       <div class="input-section">
         <label for="preferredNamesFile"
-          >스친 명단 파일 (.txt) 선택 (선택 사항):</label
+          >맞팔 명단 파일 (.txt) 선택 (선택 사항):</label
         >
         <div style="margin-bottom: 10px">
-          맞팔로우 되어 있는 분을 스친이라 정의하며, 가중치는 5배를 준다.
+          가중치는 총 인원 수 / 맞팔로우 된 인원이 적용됩니다.
         </div>
         <div class="file-upload-wrapper">
           <input type="file" id="preferredNamesFile" accept=".txt" />
@@ -55,6 +56,16 @@
 
       <div class="button-group">
         <button id="drawBtn" class="btn secondary" disabled>뽑기 시작</button>
+      </div>
+    </div>
+
+
+    <!-- ✅ 룰렛(슬롯) 오버레이 -->
+    <div id="rouletteOverlay" class="roulette hidden" aria-hidden="true">
+      <div class="roulette-box">
+        <div class="spinner"></div>
+        <div id="rouletteName" class="roulette-name">준비 중...</div>
+        <p class="roulette-hint">돌아가는 동안 잠시만 기다려주세요</p>
       </div>
     </div>
 

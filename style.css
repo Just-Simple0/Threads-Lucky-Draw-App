@@ -189,3 +189,183 @@ input[type="file"] {
   color: #ef4444;
   min-height: 1.5em;
 }
+
+/* ==== Roulette Overlay ==== */
+.roulette.hidden {
+  display: none;
+}
+
+.roulette {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999; /* 컨테이너 위로 */
+}
+
+.roulette-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  width: min(90vw, 520px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+.roulette-name {
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: 0.5px;
+  margin: 16px 0 6px;
+  min-height: 1.5em;
+  word-break: keep-all;
+}
+
+.roulette-hint {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+/* 작은 로딩 스피너 */
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2563eb; /* primary와 톤 맞춤 */
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Polishing ===== */
+.subtext {
+  margin-top: -6px;
+  margin-bottom: 18px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.footnote {
+  margin-top: 14px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+/* 컨테이너 상단을 살짝 강조 */
+.container {
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 65%, #fafafa 100%);
+}
+
+/* ✅ 플랫 버튼 (원래 톤 유지) */
+.btn {
+  box-shadow: none;
+}
+.btn:active {
+  transform: none;
+}
+.primary {
+  background: #2563eb;
+} /* 기존 flat color 유지 */
+.secondary {
+  background: #10b981;
+} /* 기존 flat color 유지 */
+
+/* 파일 업로드 줄 높이/간격 미세 조정 */
+.file-upload-wrapper {
+  padding: 10px 12px;
+}
+
+/* 명단 리스트 가독성 강화 */
+.candidate-list {
+  background: #fff;
+}
+.candidate-item {
+  padding: 8px 6px;
+}
+.candidate-item:nth-child(2n) {
+  background: #fafafa;
+}
+.preferred-indicator {
+  filter: drop-shadow(0 0 1px rgba(37, 99, 235, 0.1));
+}
+
+/* 당첨 텍스트에 살짝 애니메이션 */
+.winner.pop {
+  animation: popIn 520ms ease-out;
+}
+@keyframes popIn {
+  0% {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ==== (이미 추가했다면 유지) Roulette Overlay ==== */
+.roulette.hidden {
+  display: none;
+}
+.roulette {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.roulette-box {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 32px;
+  width: min(90vw, 520px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+.roulette-name {
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: 0.5px;
+  margin: 16px 0 6px;
+  min-height: 1.5em;
+}
+.roulette-hint {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
