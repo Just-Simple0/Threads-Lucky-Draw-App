@@ -6,6 +6,7 @@ const preferredNamesFileInput = document.getElementById("preferredNamesFile");
 const loadCandidatesBtn = document.getElementById("loadCandidatesBtn");
 const drawBtn = document.getElementById("drawBtn");
 const winnerP = document.getElementById("winner");
+const weightP = document.getElementById("weight");
 const candidateListDiv = document.getElementById("candidateList"); // 명단 목록을 표시할 div
 
 // 파일 이름 표시를 위한 요소 참조
@@ -104,9 +105,9 @@ loadCandidatesBtn.addEventListener("click", async () => {
             );
     }
 
-    winnerP.textContent =
-      `명단을 불러왔습니다. '뽑기 시작' 버튼을 눌러주세요.\n` +
-      `현재 가중치 비율: 💙맞팔 ${weightFactor}배 / 일반 1배`;
+    winnerP.textContent = "명단을 불러왔습니다. '뽑기 시작' 버튼을 눌러주세요.";
+    weightP.textContent = `현재 가중치 비율 : 💙맞팔 ${weightFactor}배 / 일반 1배`
+
   } catch (error) {
     alert("파일을 읽는 도중 오류가 발생했습니다: " + error.message);
     console.error("파일 읽기 오류:", error);

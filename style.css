@@ -288,6 +288,13 @@ input[type="file"] {
   padding: 10px 12px;
 }
 
+.weight  {
+  color: #888;
+  text-align: center;
+  margin: 0;
+  padding: 10px 0;
+}
+
 /* 명단 리스트 가독성 강화 */
 .candidate-list {
   background: #fff;
