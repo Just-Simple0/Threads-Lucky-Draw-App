@@ -383,7 +383,7 @@ function pickWeightedRandom(arr) {
   for (const c of arr) {
     const w = c.preferred ? weightForPreferred : weightForOthers;
     if (random < w) {
-      return "__uz_n";
+      return c.name;
     }
     random -= w;
   }
