@@ -85,9 +85,28 @@ loadCandidatesBtn.addEventListener("click", async () => {
     // 명단 목록 화면에 표시
     displayCandidateList(candidates);
 
-    // 뽑기 시작 버튼 활성화 및 당첨자 텍스트 초기화
+    // 뽑기 시작 버튼 활성화 및 가중치 정보 표시
     drawBtn.disabled = false;
-    winnerP.textContent = "명단을 불러왔습니다. '뽑기 시작' 버튼을 눌러주세요.";
+
+    const totalCandidatesCount = candidates.length;
+    const preferredCandidatesCount = candidates.filter(
+      (c) => c.preferred
+    ).length;
+
+    let weightFactor = 1;
+    if (preferredCandidatesCount > 0) {
+      weightFactor =
+        preferredCandidatesCount >= totalCandidatesCount / 2
+          ? 2
+          : Math.max(
+              1,
+              Math.floor(totalCandidatesCount / preferredCandidatesCount)
+            );
+    }
+
+    winnerP.textContent =
+      `명단을 불러왔습니다. '뽑기 시작' 버튼을 눌러주세요.\n` +
+      `현재 가중치 비율: 💙맞팔 ${weightFactor}배 / 일반 1배`;
   } catch (error) {
     alert("파일을 읽는 도중 오류가 발생했습니다: " + error.message);
     console.error("파일 읽기 오류:", error);
@@ -358,21 +377,20 @@ function pickWeightedRandom(arr) {
     return arr[randomIndex].name;
   }
 
-  // 가중치 계산: (전체 명단 인원 수 / 스친 명단 인원 수)를 기준으로 가중치 비율을 정함
-  // 최소 가중치 비율을 1로 설정하여 일반 후보보다 항상 높게 유지 (나누기 0 방지)
-  const weightFactor = Math.max(
-    1,
-    Math.floor(totalCandidatesCount / preferredCandidatesCount)
-  );
+  // 가중치 계산:
+  // 1) 스친이 '과반(>= 50%)'이면 최소 2배 부여
+  // 2) 그 외에는 (전체 / 스친) 비율을 적용하며, 하한은 1
+  const weightFactor =
+    preferredCandidatesCount >= totalCandidatesCount / 2
+      ? 2
+      : Math.max(
+          1,
+          Math.floor(totalCandidatesCount / preferredCandidatesCount)
+        );
 
-  // 예를 들어, 전체 100명, 스친 10명 -> weightFactor = 10
-  // 일반 후보 가중치 1
-  // 스친 후보 가중치 10
-
-  // 만약 스친 명단이 전체 명단보다 많거나 같으면 (비율이 1이하)
-  // 최소한의 가중치 차이를 두기 위해 스친 후보에 2배의 가중치 부여 (원하면 이 값 조정 가능)
-  const weightForPreferred = preferredCandidatesCount === 0 ? 1 : weightFactor; // 0으로 나누는 것 방지
-  const weightForOthers = 1; // 일반 후보의 가중치
+  // 일반 후보는 1, 스친 후보는 위에서 계산한 비율(또는 2배)
+  const weightForPreferred = weightFactor;
+  const weightForOthers = 1;
 
   const totalWeight = arr.reduce(
     (sum, c) => sum + (c.preferred ? weightForPreferred : weightForOthers),
