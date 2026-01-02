@@ -8,6 +8,7 @@ const drawBtn = document.getElementById("drawBtn");
 const winnerP = document.getElementById("winner");
 const weightP = document.getElementById("weight");
 const candidateListDiv = document.getElementById("candidateList"); // 명단 목록을 표시할 div
+const winnerCountInput = document.getElementById("winnerCount");
 
 // 파일 이름 표시를 위한 요소 참조
 const namesFileNameDisplay = document.getElementById("namesFileNameDisplay");
@@ -97,8 +98,8 @@ loadCandidatesBtn.addEventListener("click", async () => {
     let weightFactor = 1;
     if (preferredCandidatesCount > 0) {
       weightFactor =
-        preferredCandidatesCount >= totalCandidatesCount / 2
-          ? 2
+        preferredCandidatesCount >= totalCandidatesCount / 5
+          ? 5
           : Math.max(
               1,
               Math.floor(totalCandidatesCount / preferredCandidatesCount)
@@ -106,8 +107,7 @@ loadCandidatesBtn.addEventListener("click", async () => {
     }
 
     winnerP.textContent = "명단을 불러왔습니다. '뽑기 시작' 버튼을 눌러주세요.";
-    weightP.textContent = `현재 가중치 비율 : 💙맞팔 ${weightFactor}배 / 일반 1배`
-
+    weightP.textContent = `현재 가중치 비율 : 💙맞팔 ${weightFactor}배 / 일반 1배`;
   } catch (error) {
     alert("파일을 읽는 도중 오류가 발생했습니다: " + error.message);
     console.error("파일 읽기 오류:", error);
@@ -146,70 +146,67 @@ function displayCandidateList(list) {
   });
 }
 
-function animateRoulette(finalName, allCandidates, durationMs = 3000) {
-  const overlay = document.getElementById("rouletteOverlay");
-  const nameEl = document.getElementById("rouletteName");
+function animateRoulette(
+  finalName,
+  allCandidates,
+  durationMs = 3000,
+  roundLabel = ""
+) {
+  return new Promise((resolve) => {
+    const overlay = document.getElementById("rouletteOverlay");
+    const nameEl = document.getElementById("rouletteName");
+    const hintEl = document.querySelector(".roulette-hint");
 
-  drawBtn.disabled = true;
-  overlay.classList.remove("hidden");
-  overlay.setAttribute("aria-hidden", "false");
+    overlay.classList.remove("hidden");
+    overlay.setAttribute("aria-hidden", "false");
 
-  const namesPool = allCandidates.map((c) => c.name);
-  const total = Math.max(1500, durationMs);
-  const steps = 42; // 조금 더 풍성하게
-  const start = performance.now();
-
-  // ease-out으로 감속
-  const easeOut = (t) => 1 - Math.pow(1 - t, 3);
-
-  let lastIndex = -1;
-
-  const spinOnce = () => {
-    // 이름을 바꾸면서 '틱' 사운드
-    sound.tick();
-    // 새로운 인덱스
-    let idx;
-    do {
-      idx = Math.floor(Math.random() * namesPool.length);
-    } while (namesPool.length > 1 && idx === lastIndex);
-    lastIndex = idx;
-    nameEl.textContent = namesPool[idx] || "…";
-  };
-
-  function tick(now) {
-    const elapsed = now - start;
-    const t = Math.min(1, elapsed / total);
-    const eased = easeOut(t);
-
-    // 간격 계산: 초반 빠르게 → 후반 느리게
-    const minInterval = 32; // ms
-    const maxInterval = 200; // ms
-    const interval = minInterval + (maxInterval - minInterval) * eased;
-
-    spinOnce();
-
-    if (elapsed < total) {
-      setTimeout(() => requestAnimationFrame(tick), interval);
-    } else {
-      // 마지막 고정 + 승리 사운드
-      nameEl.textContent = finalName;
-      sound.win();
-      launchConfetti();
-      setTimeout(() => {
-        overlay.classList.add("hidden");
-        overlay.setAttribute("aria-hidden", "true");
-        winnerP.textContent = `🎉 당첨자: ${finalName}`;
-        // 당첨 텍스트에 팝 애니메이션 클래스 부여
-        winnerP.classList.remove("pop");
-        // 리플로우 트릭으로 애니메이션 재적용
-        void winnerP.offsetWidth;
-        winnerP.classList.add("pop");
-
-        drawBtn.disabled = false;
-      }, 900);
+    // 현재 몇 번째 추첨인지 안내 (예: "1번째 당첨자 추첨 중...")
+    if (roundLabel) {
+      hintEl.textContent = roundLabel;
     }
-  }
-  requestAnimationFrame(tick);
+
+    const namesPool = allCandidates.map((c) => c.name);
+    const total = Math.max(1500, durationMs);
+    const start = performance.now();
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    let lastIndex = -1;
+
+    const spinOnce = () => {
+      sound.tick();
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * namesPool.length);
+      } while (namesPool.length > 1 && idx === lastIndex);
+      lastIndex = idx;
+      nameEl.textContent = namesPool[idx] || "…";
+    };
+
+    function tick(now) {
+      const elapsed = now - start;
+      const t = Math.min(1, elapsed / total);
+      const eased = easeOut(t);
+      const interval = 32 + (200 - 32) * eased;
+
+      spinOnce();
+
+      if (elapsed < total) {
+        setTimeout(() => requestAnimationFrame(tick), interval);
+      } else {
+        // 결과 고정
+        nameEl.textContent = finalName;
+        sound.win();
+        launchConfetti();
+
+        // 당첨자 이름을 확인하고 축하할 시간을 준 뒤 다음으로 넘어감
+        setTimeout(() => {
+          overlay.classList.add("hidden");
+          overlay.setAttribute("aria-hidden", "true");
+          resolve(); // 애니메이션 완료를 알림
+        }, 1200);
+      }
+    }
+    requestAnimationFrame(tick);
+  });
 }
 
 // === Sound Engine (Web Audio API) ===
@@ -379,11 +376,11 @@ function pickWeightedRandom(arr) {
   }
 
   // 가중치 계산:
-  // 1) 스친이 '과반(>= 50%)'이면 최소 2배 부여
+  // 1) 스친이 '과반(>= 50%)'이면 최소 5배 부여
   // 2) 그 외에는 (전체 / 스친) 비율을 적용하며, 하한은 1
   const weightFactor =
-    preferredCandidatesCount >= totalCandidatesCount / 2
-      ? 2
+    preferredCandidatesCount >= totalCandidatesCount / 5
+      ? 5
       : Math.max(
           1,
           Math.floor(totalCandidatesCount / preferredCandidatesCount)
@@ -410,16 +407,53 @@ function pickWeightedRandom(arr) {
 }
 
 // 뽑기 시작 버튼 클릭 이벤트 리스너 (룰렛 애니메이션 포함)
-drawBtn.addEventListener("click", () => {
+drawBtn.addEventListener("click", async () => {
   if (candidates.length === 0) {
     alert("먼저 명단을 불러오세요.");
     return;
   }
-  const finalWinnerName = pickWeightedRandom(candidates);
-  if (!finalWinnerName) {
-    winnerP.textContent = "당첨자를 뽑을 수 없습니다.";
+
+  const count = parseInt(winnerCountInput.value) || 1;
+  if (count > candidates.length) {
+    alert(`후보자(${candidates.length}명)보다 많은 인원을 뽑을 수 없습니다.`);
     return;
   }
-  // 룰렛 애니메이션 실행 (3초 내외)
-  animateRoulette(finalWinnerName, candidates, 3100);
+
+  drawBtn.disabled = true;
+  winnerP.textContent = "추첨을 시작합니다...";
+
+  let remainingCandidates = [...candidates]; // 원본 보존을 위해 복사
+  let finalWinners = [];
+
+  // 입력한 인원수만큼 반복문 실행
+  for (let i = 0; i < count; i++) {
+    const winnerName = pickWeightedRandom(remainingCandidates);
+
+    if (winnerName) {
+      // 룰렛 애니메이션이 끝날 때까지 대기
+      await animateRoulette(
+        winnerName,
+        remainingCandidates,
+        2500,
+        `${i + 1}번째 당첨자 추첨 중...`
+      );
+
+      finalWinners.push(winnerName);
+
+      // 중복 방지를 위해 당첨자를 명단에서 제외
+      remainingCandidates = remainingCandidates.filter(
+        (c) => c.name !== winnerName
+      );
+
+      // 화면에 현재까지의 당첨자 명단 표시
+      winnerP.textContent = `🎉 당첨자: ${finalWinners.join(", ")}`;
+
+      // 팝 애니메이션 재적용
+      winnerP.classList.remove("pop");
+      void winnerP.offsetWidth;
+      winnerP.classList.add("pop");
+    }
+  }
+
+  drawBtn.disabled = false;
 });
