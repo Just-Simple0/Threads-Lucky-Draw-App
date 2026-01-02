@@ -98,12 +98,8 @@ loadCandidatesBtn.addEventListener("click", async () => {
     let weightFactor = 1;
     if (preferredCandidatesCount > 0) {
       weightFactor =
-        totalCandidatesCount / preferredCandidatesCount <= 5
-          ? 5
-          : Math.max(
-              1,
-              Math.floor(totalCandidatesCount / preferredCandidatesCount)
-            );
+        totalCandidatesCount / preferredCandidatesCount <= 5 ? 5 : Math.max();
+      1, Math.floor(totalCandidatesCount / preferredCandidatesCount);
     }
 
     winnerP.textContent = "명단을 불러왔습니다. '뽑기 시작' 버튼을 눌러주세요.";
