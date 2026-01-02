@@ -98,7 +98,7 @@ loadCandidatesBtn.addEventListener("click", async () => {
     let weightFactor = 1;
     if (preferredCandidatesCount > 0) {
       weightFactor =
-        preferredCandidatesCount >= totalCandidatesCount / 5
+        totalCandidatesCount / preferredCandidatesCount <= 5
           ? 5
           : Math.max(
               1,
@@ -379,7 +379,7 @@ function pickWeightedRandom(arr) {
   // 1) 스친이 '과반(>= 50%)'이면 최소 5배 부여
   // 2) 그 외에는 (전체 / 스친) 비율을 적용하며, 하한은 1
   const weightFactor =
-    preferredCandidatesCount >= totalCandidatesCount / 5
+    totalCandidatesCount / preferredCandidatesCount <= 5
       ? 5
       : Math.max(
           1,
